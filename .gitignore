@@ -19,3 +19,6 @@ trimmed_reads/
 pytors/
 .nextflow*
 *.log
+*.save
+nxf-tmp*
+new_template_main.nf

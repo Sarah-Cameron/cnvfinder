@@ -1,3 +1,0 @@
-task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
-2	17/3ab269	3471167	CNVFINDER:BUILD_REFERENCE:GCFILE (Making the GC File for ERR304775)	COMPLETED	0	2026-06-25 10:52:39.893	9.1s	8s	111.3%	129.9 MB	2.3 GB	89.9 MB	5.2 MB
-3	3a/e9303b	3472251	CNVFINDER:BUILD_REFERENCE:CONFIG (Making config file for ERR304775)	COMPLETED	0	2026-06-25 10:52:49.195	7s	7s	85.9%	120.9 MB	2.3 GB	47.3 MB	41.6 KB
