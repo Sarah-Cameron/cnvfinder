@@ -1,5 +1,6 @@
 GC_files/
 configs/
+null/
 metadata/
 results/
 *.sam
