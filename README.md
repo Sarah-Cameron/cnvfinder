@@ -4,8 +4,8 @@
 
 **nf-core/cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. Given paired reads and a matching genome assembly for each sample, the pipeline:
 
-1. **QCs reads** – optionally downloads reads from the SRA/ENA, trims reads with fastp, runs FastQC and collates these outputs into a MultiQC report (reads and assemblies can optionally be downloaded ahead of time via a helper script — see Usage below)
-2. **Builds a reference configuration** – generates a GC file and a CNVpytor-compatible configuration file for each assembly 
+1. **Downloads reads and runs QC** – by default, downloads reads from SRA/ENA (via iSeq), then trims with fastp, runs FastQC and collates these into a MultiQC report. Reference assemblies are **not** downloaded by the pipeline and must be obtained separately (see Usage below)
+2. **Builds a reference configuration** – generates a GC file and a CNVpytor-compatible configuration file for each assembly
 3. **Maps reads to the reference** – indexes the assembly, maps trimmed reads, converts SAM to BAM, and assesses mapping quality
 4. **Calls copy number variants** – partitions the genome into bins (default 100 bp) and calls CNVs with [CNVpytor](https://github.com/abyzovlab/CNVpytor)
 
@@ -16,36 +16,40 @@
 
 ### Input data
 
-The pipeline takes **matched read and assembly pairs** rather than a standard samplesheet. Prepare:
-
-- A CSV file (passed via `--accessions`) with two columns: read name and assembly name
-- Read files named `<read_name>.fastq.gz`, placed in a folder called `reads/`
-- Assembly files named `<assembly_name>.fasta` / `.fa` / `.fna`, placed in a folder called `assemblies/`
-
-**Example `accessions.csv`:**
+The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns: read name and assembly name.
 
 ```csv
-read_name,assembly_name
-sample1_reads,sample1_assembly
-sample2_reads,sample2_assembly
+ERR304775,SAMEA1920853
+SRA309999,my_own_assembly
 ```
 
-### Downloading data automatically (optional)
-
-If your `accessions.csv` contains SRA accessions and BioSample IDs instead of local file names, reads and assemblies need to be downloaded **before** running the pipeline. A ready-made accessions file can be pulled straight from [NCBI/SRA](https://www.ncbi.nlm.nih.gov/sra): filter for the genomes you want, then use *Send to → File → RunInfo*. The downloaded file will contain `Run` and `BioSample` columns — copy those two columns into your `accessions.csv`.
-
-Run:
+Assemblies are never downloaded by the pipeline itself, so you can choose what to use. We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this is messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. If you use a closed genome that has been assemblied with long reads these may be captured by the assembly and therefore won't give rise to change in read depth and so this method wouldn't necessarily be suitable. To download the AllTheBacteria assemblies first use:
 
 ```bash
-bin/both_downloads.sh accessions.csv
+bin/download_atb.sh biosample_name_list.txt 
 ```
 
-This downloads reads from SRA/ENA (via iSeq) and, separately, downloads the matching assembly from [AllTheBacteria](https://www.allthebacteria.org) by BioSample name. Both are handled by this script but are downloaded as two distinct steps, run this ahead of the pipeline itself — the pipeline does not fetch assemblies during execution.
+This pulls matching assemblies from [AllTheBacteria](https://www.allthebacteria.org) into an `assemblies/` folder, named `<assembly_name>.fa` to match the second column of `accessions.csv`.
+
+How you fill in the **read name** column (and where reads come from) depends on which of the two paths below you're using.
+
+#### Path A: Using SRA/ENA accessions (default)
+
+By default, the pipeline downloads reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. A ready-made file with the right columns (`Run`, `BioSample`) can be pulled straight from [NCBI/SRA](https://www.ncbi.nlm.nih.gov/sra): filter for the genomes you want, then use *Send to → File → RunInfo*. Then you can easily copy and paste the SRA accession IDs and corresponding BioSample ID for that read set.
+
+Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed beyond having downloaded the assemblies as above.
 
 > [!NOTE]
-> This requires `iSeq` installed and activated via conda.
+> If your cluster's compute nodes can't reach the internet, this in-run download won't work. Pre-download reads and assemblies together ahead of time instead, with `bin/both_downloads.sh`, then follow Path B below.
 
-If you already have your own reads and assemblies locally (e.g. private data), skip this step and set `--skip_download true`.
+#### Path B: Using your own reads
+
+If you have your own read files (private data, or pre-downloaded for HPC), place them in a folder called `reads/`, named `<read_name>.fastq.gz`. Use those same names as the `read_name` column in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
+
+```csv
+my_own_reads,my_own_assembly
+my_own_reads2,my_own_assembly2
+```
 
 ### Running the pipeline
 
@@ -62,7 +66,7 @@ nextflow run nf-core/cnvfinder \
 | ----------------- | ---------------------------------------------------------------------------- | ----------------------- |
 | `--accessions`    | CSV file mapping read names to assembly names (see format above)             | *required*              |
 | `--profile`       | Execution profile: `docker`, `apptainer`, or `slurm`                        | *required*              |
-| `--fasta`         | File extension of assemblies (e.g. `.fasta`, `.fa`, `.fna`)                  | `fa`                       |
+| `--fasta`         | File extension of assemblies (e.g. `.fasta`, `.fa`, `.fna`)                  | `fa`                        |
 | `--skip_download` | Skip automatic download of reads/assemblies (use for private/local data)     | `false`                 |
 | `--bin_size`      | Read-depth bin size for CNV calling. Must be a multiple of 100.              | `100`                   |
 | `--species`       | Target species (string)                                                     | `Klebsiella pneumoniae` |
@@ -86,7 +90,6 @@ Results are organised into the following subfolders of `--outdir`:
 | `SAMs/`                      | SAM files from read mapping                                           |
 | `Trimmed_reads/`             | Trimmed FASTQ read files                                              |
 
-
 ## Credits
 
 nf-core/cnvfinder was originally written by Sarah Cameron.
@@ -102,7 +105,5 @@ An extensive list of references for the tools used by the pipeline can be found 
 You can cite the `nf-core` publication as follows:
 
 > **The nf-core framework for community-curated bioinformatics pipelines.**
-> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
-> *Nat Biotechnol.* 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).nity-curated bioinformatics pipelines.**
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 > *Nat Biotechnol.* 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
