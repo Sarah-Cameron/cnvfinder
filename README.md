@@ -59,8 +59,10 @@ nextflow run main.nf \
    --accessions accessions.csv \
    --outdir <OUTDIR>
 
-### Test example 
-nextflow run main.nf -profile docker --accessions test.csv --species Bordetella pertussis 
+### Test example
+#### Download AllTheBacteria assembly
+sh bin/download_atb.sh test.txt
+nextflow run main.nf -profile docker --accessions test.csv --species 'Bordetella pertussis' 
 ```
 
 ### Parameters
