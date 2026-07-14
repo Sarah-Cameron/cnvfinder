@@ -103,7 +103,7 @@ Results are organised into the following subfolders of `--outdir`:
 | `SAMs/`                      | SAM files from read mapping                                           |
 | `Trimmed_reads/`             | Trimmed FASTQ read files                                              |
 
-`calls/` is where you will find a tsv file for each sample with CNVpytor calls. If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, calls around the origin of replication when there has been fast growth and multiple replication forks started at once. 
+`calls/` is where you will find a tsv file for each sample with CNVpytor calls. If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, multi-copy genes not in tandem. 
 
 ## Credits
 
