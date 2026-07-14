@@ -27,7 +27,7 @@ ERR304775,SAMEA1920853
 SRA309999,my_own_assembly
 ```
 
-Assemblies are never downloaded by the pipeline itself, so you can choose what to use. We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this is messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. If you use a closed genome that has been assemblied with long reads these may be captured by the assembly and therefore won't give rise to change in read depth and so this method wouldn't necessarily be suitable. To download the AllTheBacteria assemblies first use:
+Assemblies are not downloaded by the pipeline itself, so you can choose what to use as your reference. We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this can be messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. If you use a closed genome that has been assemblied with long reads these may be captured by the assembly and therefore won't give rise to change in read depth and so this method wouldn't necessarily be suitable. To download the AllTheBacteria assemblies first use:
 
 ```bash
 bin/download_atb.sh biosample_name_list.txt 
@@ -102,6 +102,8 @@ Results are organised into the following subfolders of `--outdir`:
 | `Results/pipeline_info/`     | Pipeline execution report and software versions                      |
 | `SAMs/`                      | SAM files from read mapping                                           |
 | `Trimmed_reads/`             | Trimmed FASTQ read files                                              |
+
+`calls/` is where you will find a tsv file for each sample with CNVpytor calls. If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, calls around the origin of replication when there has been fast growth and multiple replication forks started at once. 
 
 ## Credits
 
