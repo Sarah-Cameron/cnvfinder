@@ -54,13 +54,13 @@ my_own_reads2,my_own_assembly2
 ### Running the pipeline
 
 ```bash
-nextflow run nf-core/cnvfinder \
+nextflow run main.nf \
    -profile <docker/apptainer/slurm> \
    --accessions accessions.csv \
    --outdir <OUTDIR>
 
 ### Test example 
-nextflow run nf-core/cnvfinder -profile docker --accessions test.csv --species Bordetella pertussis 
+nextflow run main.nf -profile docker --accessions test.csv --species Bordetella pertussis 
 ```
 
 ### Parameters
@@ -95,7 +95,7 @@ Results are organised into the following subfolders of `--outdir`:
 
 ## Credits
 
-nf-core/cnvfinder was originally written by Sarah Cameron.
+cnvfinder was originally written by Sarah Cameron.
 
 ## Contributions and Support
 
