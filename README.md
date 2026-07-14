@@ -70,7 +70,7 @@ nextflow run main.nf -profile docker --accessions test.csv --species 'Bordetella
 
 
 ### If running on Mac Terminal (ARM) with docker
-nextflow run main.nf --accessions test.csv -profile docker,emulate_amd64 --species Bordetella pertussis
+nextflow run main.nf --accessions test.csv -profile docker,emulate_amd64 --species 'Bordetella pertussis'
 ```
 
 ### Parameters
