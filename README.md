@@ -12,7 +12,10 @@
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set up Nextflow. Then git clone this repository. 
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/get_started/environment_setup/overview) on how to set up Nextflow. Then ensure apptainer, Singularity or docker are installed and running.
+>
+>Git clone this repository and enter cnvfinder directory to run analyses.
+> `git clone https://github.com/Sarah-Cameron/cnvfinder.git`          
 
 ### Input data
 
