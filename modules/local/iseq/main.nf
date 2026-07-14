@@ -14,6 +14,7 @@ process READS {
 	tuple val(meta), path("*.fastq.gz"), path("${meta.id}.metadata.tsv"), emit: reads
 	path "versions.yml", emit: versions
 
+	script:
 	"""
 	iseq -i ${meta.id} -g
 
