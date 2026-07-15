@@ -67,6 +67,7 @@ nextflow run main.nf \
 ### Test example
 #### Download AllTheBacteria assembly
 sh bin/download_atb.sh test.txt
+#### Run the example on Bordetella pertussis strain UK54 
 nextflow run main.nf -profile docker --accessions test.csv --species 'Bordetella pertussis'
 
 
@@ -83,7 +84,7 @@ nextflow run main.nf --accessions test.csv -profile docker,emulate_amd64 --speci
 | `--fasta`         | File extension of assemblies (e.g. `.fasta`, `.fa`, `.fna`)                  | `fa`                        |
 | `--skip_download` | Skip automatic download of reads/assemblies (use for private/local data)     | `false`                 |
 | `--bin_size`      | Read-depth bin size for CNV calling. Must be a multiple of 100.              | `100`                   |
-| `--species`       | Target species (string)                                                     | `Klebsiella pneumoniae` |
+| `--species`       | Target species (string) - only needed for config file                                                     | `Klebsiella pneumoniae` |
 
 
 ## Pipeline output
