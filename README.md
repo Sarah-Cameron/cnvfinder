@@ -1,7 +1,7 @@
 # cnvfinder
 
 <p align="center">
-  <img src="cnvfinder.svg" width="700" alt="cnvfinder Worfklow">
+  <img src="cnvfinder.png" width="600" alt="cnvfinder Worfklow">
 </p>
 
 ## Introduction
