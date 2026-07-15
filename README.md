@@ -40,11 +40,11 @@ How you fill in the **read name** column (and where reads come from) depends on 
 
 #### Path A: Using SRA/ENA accessions (default)
 
-By default, the pipeline downloads reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. A ready-made file with the right columns (`Run`, `BioSample`) can be pulled straight from [NCBI/SRA](https://www.ncbi.nlm.nih.gov/sra): filter for the genomes you want, then use *Send to → File → RunInfo*. Then you can easily copy and paste the SRA accession IDs and corresponding BioSample ID for that read set.
-
-Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed beyond having downloaded the assemblies as above.
+By default, the pipeline downloads reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed beyond having downloaded the assemblies as above.
 
 > [!NOTE]
+> A ready-made file with the right columns (`Run`, `BioSample`) can be pulled straight from [NCBI/SRA](https://www.ncbi.nlm.nih.gov/sra): filter for the genomes you want, then use *Send to → File → RunInfo*. Then you can easily copy and paste the SRA accession IDs and corresponding BioSample ID for that read set.
+> 
 > If your cluster's compute nodes can't reach the internet, this in-run download won't work. Pre-download reads and assemblies together ahead of time instead, with `bin/both_downloads.sh`, then follow Path B below.
 
 #### Path B: Using your own reads
