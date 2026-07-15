@@ -4,7 +4,7 @@
 
 **cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. This has been written in Nextflow using the nf-core template. Given paired reads and a matching genome assembly for each sample, the pipeline:
 
-1. **Download reads and runs QC** – by default, downloads reads from SRA/ENA (via iSeq), trims with fastp, runs FastQC and collates these into a MultiQC report. Reference assemblies are **not** downloaded by the pipeline and must be obtained separately (see Usage below)
+1. **Download reads and runs QC** – by default, downloads reads from SRA/ENA (via iSeq) and assemblies from [AllTheBacteria](https://www.allthebacteria.org), trims reads with fastp, runs FastQC and collates these into a MultiQC report. 
 3. **Builds a reference configuration** – generates a GC file and a CNVpytor-compatible configuration file for each assembly
 4. **Maps reads to the reference** – indexes the assembly, maps trimmed reads, converts SAM to BAM, and assesses mapping quality
 5. **Calls copy number variants** – partitions the genome into bins (default 100 bp) and calls CNVs with [CNVpytor](https://github.com/abyzovlab/CNVpytor)
@@ -28,26 +28,20 @@ cd cnvfinder
 
 ### Input data
 
-The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns: read name and assembly name. Each line enters the pipeline and will be that read set mapped against that assembly. You can specify the same read set mapped to multiple assemblies and vice versa:
+The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns: read name (SRA accession ID) and assembly name (BioSample ID). Each line enters the pipeline and will be that read set mapped against that assembly. You can specify the same read set mapped to multiple assemblies and vice versa:
 
 ```csv
 ERR304775,SAMEA1920853
-ERR304775,my_own_assembly
+ERR304775,SAMN0000001
 ```
 
-Assemblies are not downloaded by the pipeline itself, so you can choose what to use as your reference. We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this can be messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. If you use a closed genome that has been assemblied with long reads these may be captured by the assembly and therefore won't give rise to change in read depth and so this method wouldn't necessarily be suitable. To download the AllTheBacteria assemblies first use:
-
-```bash
-sh bin/download_atb.sh biosample_name_list.txt 
-```
-
-This pulls matching assemblies from [AllTheBacteria](https://www.allthebacteria.org) into an `assemblies/` folder, named `<assembly_name>.fa` to match the second column of `accessions.csv`.
+We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this can be messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. I
 
 How you fill in the **read name** column (and where reads come from) depends on which of the two paths below you're using.
 
-#### Path A: Using SRA/ENA accessions (default)
+#### Path A: Using SRA/ENA accessions and BioSample accession (default)
 
-By default, the pipeline downloads reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed beyond having downloaded the assemblies as above.
+By default, the pipeline downloads and assemblies reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed. 
 
 > [!IMPORTANT]
 > If your cluster's compute nodes can't reach the internet, this in-run download won't work. Pre-download reads and assemblies together ahead of time instead, with `bin/both_downloads.sh`, then follow Path B below.
@@ -57,7 +51,7 @@ By default, the pipeline downloads reads for you. Use SRA Run accessions as the 
 
 #### Path B: Using your own reads
 
-If you have your own read files (private data, or pre-downloaded for HPC), place them in a folder called `reads/`, named `<read_name>.fastq.gz`. Use those same names as the `read_name` column in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
+If you have your own read files (private data, or pre-downloaded for HPC), place them in a folder called `reads/`, named `<read_name>.fastq.gz`. Place assemblies in `/assemblies`, named `<assembly_name>.fa. (If .fasta use --fasta fasta when running the pipeline. Use those same names as the `read_name` and `assembly_name` columns in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
 
 ```csv
 my_own_reads,my_own_assembly
@@ -73,11 +67,11 @@ nextflow run main.nf \
    --outdir <OUTDIR>
 
 ### Test example
-# Download AllTheBacteria assembly
-sh bin/download_atb.sh test.txt
 # Run the example on Bordetella pertussis strain UK54 
 nextflow run main.nf -profile docker --accessions test.csv --species 'Bordetella pertussis'
 
+# Run with your own reads and assemblies
+nextflow run main.nf -profile docker --accessions my_own_reads.csv --skip_download true --fasta fna --species 'Campylobacter jejuni'
 
 ### If running on Mac Terminal (ARM) with docker
 nextflow run main.nf --accessions test.csv -profile docker,emulate_amd64 --species 'Bordetella pertussis'
