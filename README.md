@@ -1,9 +1,5 @@
 # cnvfinder
 
-<p align="center">
-  <img src="cnvfinder.png" width="600" alt="cnvfinder Worfklow">
-</p>
-
 ## Introduction
 
 **cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. Given paired reads and a matching genome assembly for each sample, the pipeline:
@@ -12,6 +8,10 @@
 3. **Builds a reference configuration** – generates a GC file and a CNVpytor-compatible configuration file for each assembly
 4. **Maps reads to the reference** – indexes the assembly, maps trimmed reads, converts SAM to BAM, and assesses mapping quality
 5. **Calls copy number variants** – partitions the genome into bins (default 100 bp) and calls CNVs with [CNVpytor](https://github.com/abyzovlab/CNVpytor)
+
+<p align="center">
+  <img src="cnvfinder.png" width="500" alt="cnvfinder Worfklow">
+</p>
 
 ## Usage
 
