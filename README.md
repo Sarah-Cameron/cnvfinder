@@ -1,5 +1,7 @@
 # cnvfinder
 
+![cnvfinder Worflow](cnvfinder.svg)
+
 ## Introduction
 
 **cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. Given paired reads and a matching genome assembly for each sample, the pipeline:
