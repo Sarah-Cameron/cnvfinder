@@ -1,4 +1,4 @@
-
+include { ASSEMBLY} from '../../../modules/local/assembly/main'
 include { READS   } from '../../../modules/local/iseq/main'
 include { FASTP   } from '../../../modules/local/fastp/main'
 include { FASTQC  } from '../../../modules/local/fastqc/main'
@@ -12,9 +12,12 @@ workflow DOWNLOAD_QC {
     main:
 
     if ( !params.skip_download ) {
-        reads_ch = READS(accession_ch)
-        ch_versions = Channel.empty().mix(READS.out.versions)
-        reads_ch    = READS.out.reads.map { meta, reads, metadata -> [ meta, reads ] }
+        READS(accession_ch)
+        ASSEMBLY(accession_ch)
+        ch_versions = Channel.empty()
+            .mix(READS.out.versions)
+            .mix(ASSEMBLY.out.versions)
+        reads_ch = READS.out.reads.map { meta, reads, metadata -> [ meta, reads ] }
     } else {
         reads_ch = accession_ch.map { meta, assembly_id ->
             [ meta, [
@@ -22,8 +25,9 @@ workflow DOWNLOAD_QC {
                 file("${params.reads_dir}/${meta.id}_2.fastq.gz")
             ]]
         }
-	ch_versions = Channel.empty()
+        ch_versions = Channel.empty()
     }
+
 
     FASTP(reads_ch)
     FASTQC(FASTP.out.reads.map { meta, read1, read2 -> [ meta, read1, read2 ] })
