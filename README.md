@@ -9,6 +9,7 @@
 4. **Maps reads to the reference** – indexes the assembly, maps trimmed reads, converts SAM to BAM, and assesses mapping quality
 5. **Calls copy number variants** – partitions the genome into bins (default 100 bp) and calls CNVs with [CNVpytor](https://github.com/abyzovlab/CNVpytor)
 
+
 <p align="center">
   <img src="cnvfinder.png" width="500" alt="cnvfinder Worfklow">
 </p>
