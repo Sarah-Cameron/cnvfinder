@@ -23,11 +23,11 @@ cd cnvfinder
 
 ### Input data
 
-The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns: read name and assembly name.
+The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns: read name and assembly name. Each line enters the pipeline and will be that read set mapped against that assembly. You can specify the same read set mapped to multiple assemblies and vice versa:
 
 ```csv
 ERR304775,SAMEA1920853
-SRA309999,my_own_assembly
+ERR304775,my_own_assembly
 ```
 
 Assemblies are not downloaded by the pipeline itself, so you can choose what to use as your reference. We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this can be messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. If you use a closed genome that has been assemblied with long reads these may be captured by the assembly and therefore won't give rise to change in read depth and so this method wouldn't necessarily be suitable. To download the AllTheBacteria assemblies first use:
@@ -44,10 +44,11 @@ How you fill in the **read name** column (and where reads come from) depends on 
 
 By default, the pipeline downloads reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed beyond having downloaded the assemblies as above.
 
-> [!NOTE]
-> A ready-made file with the right columns (`Run`, `BioSample`) can be pulled straight from [NCBI/SRA](https://www.ncbi.nlm.nih.gov/sra): filter for the genomes you want, then use *Send to → File → RunInfo*. Then you can easily copy and paste the SRA accession IDs and corresponding BioSample ID for that read set.
-> 
+> [!IMPORTANT]
 > If your cluster's compute nodes can't reach the internet, this in-run download won't work. Pre-download reads and assemblies together ahead of time instead, with `bin/both_downloads.sh`, then follow Path B below.
+
+> [!TIP]
+> A ready-made file with the right columns (`Run`, `BioSample`) can be pulled straight from [NCBI/SRA](https://www.ncbi.nlm.nih.gov/sra): filter for the genomes you want, then use *Send to → File → RunInfo*. Then you can easily copy and paste the SRA accession IDs and corresponding BioSample ID for that read set.
 
 #### Path B: Using your own reads
 
@@ -67,9 +68,9 @@ nextflow run main.nf \
    --outdir <OUTDIR>
 
 ### Test example
-#### Download AllTheBacteria assembly
+# Download AllTheBacteria assembly
 sh bin/download_atb.sh test.txt
-#### Run the example on Bordetella pertussis strain UK54 
+# Run the example on Bordetella pertussis strain UK54 
 nextflow run main.nf -profile docker --accessions test.csv --species 'Bordetella pertussis'
 
 
