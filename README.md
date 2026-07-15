@@ -16,8 +16,10 @@
 >
 
 ### Git clone this repository and enter cnvfinder directory to run analyses.
-`git clone https://github.com/Sarah-Cameron/cnvfinder.git`    
-`cd cnvfinder`
+```
+git clone https://github.com/Sarah-Cameron/cnvfinder.git 
+cd cnvfinder
+```
 
 ### Input data
 
