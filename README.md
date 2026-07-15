@@ -33,7 +33,7 @@ SRA309999,my_own_assembly
 Assemblies are not downloaded by the pipeline itself, so you can choose what to use as your reference. We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this can be messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. If you use a closed genome that has been assemblied with long reads these may be captured by the assembly and therefore won't give rise to change in read depth and so this method wouldn't necessarily be suitable. To download the AllTheBacteria assemblies first use:
 
 ```bash
-bin/download_atb.sh biosample_name_list.txt 
+sh bin/download_atb.sh biosample_name_list.txt 
 ```
 
 This pulls matching assemblies from [AllTheBacteria](https://www.allthebacteria.org) into an `assemblies/` folder, named `<assembly_name>.fa` to match the second column of `accessions.csv`.
