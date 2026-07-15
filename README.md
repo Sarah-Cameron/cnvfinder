@@ -1,6 +1,8 @@
 # cnvfinder
 
-![cnvfinder Worflow](cnvfinder.svg)
+<p align="center">
+  <img src="cnvfinder.svg" width="700" alt="cnvfinder Worfklow">
+</p>
 
 ## Introduction
 
