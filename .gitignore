@@ -1,3 +1,11 @@
+data/
+results/
+.DS_Store
+testing/
+testing*
+*.pyc
+null/
+.lineage/
 GC_files/
 configs/
 null/
