@@ -35,13 +35,13 @@ ERR304775,SAMEA1920853
 ERR304775,SAMN0000001
 ```
 
-We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) this can be messy but because the short-read reference will usually miss most genome amplifications, using this read depth based method allow us to spot these. I
+We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) although this can be messy, and detect changes in read depth other than CNVs, because the short-read reference will usually miss most genome amplifications, using this method allow us to spot these. 
 
-How you fill in the **read name** column (and where reads come from) depends on which of the two paths below you're using.
+How you fill in the csv columns depends on which of the two paths below you're using.
 
 #### Path A: Using SRA/ENA accessions and BioSample accession (default)
 
-By default, the pipeline downloads and assemblies reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. Reads are downloaded automatically (via iSeq) when you run the pipeline — no extra step needed. 
+By default, the pipeline downloads and assemblies reads for you. Use SRA Run accessions as the `read_name` column in `accessions.csv`. Reads and assemblies are downloaded automatically when you run the pipeline — no extra step needed. 
 
 > [!IMPORTANT]
 > If your cluster's compute nodes can't reach the internet, this in-run download won't work. Pre-download reads and assemblies together ahead of time instead, with `bin/both_downloads.sh`, then follow Path B below.
@@ -51,7 +51,7 @@ By default, the pipeline downloads and assemblies reads for you. Use SRA Run acc
 
 #### Path B: Using your own reads
 
-If you have your own read files (private data, or pre-downloaded for HPC), place them in a folder called `reads/`, named `<read_name>.fastq.gz`. Place assemblies in `/assemblies`, named `<assembly_name>.fa. (If .fasta use --fasta fasta when running the pipeline. Use those same names as the `read_name` and `assembly_name` columns in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
+If you have your own read files (private data, or pre-downloaded for HPC), place them in a folder called `reads/`, named `<read_name>.fastq.gz`. Place assemblies in `/assemblies`, named `<assembly_name>.fa`. (If ending is a `.fasta` use `--fasta fasta` when running the pipeline. Use those same names as the `read_name` and `assembly_name` columns in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
 
 ```csv
 my_own_reads,my_own_assembly
