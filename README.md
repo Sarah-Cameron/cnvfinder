@@ -1,12 +1,18 @@
 # cnvfinder
 
+[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A525.10.4-23aa62.svg)](https://www.nextflow.io/)
+[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
+[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
+[![run with slurm](https://img.shields.io/badge/run%20with-slurm-1AAEE8.svg?labelColor=000000)](https://www.schedmd.com)
+
+
 ## Introduction
 
 **cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. This has been written in Nextflow using the nf-core template. Given paired reads and a matching genome assembly for each sample, the pipeline:
 
-1. **Download reads and runs QC** – by default, downloads reads from SRA/ENA (via iSeq) and assemblies from [AllTheBacteria](https://www.allthebacteria.org), trims reads with fastp, runs FastQC and collates these into a MultiQC report. 
-3. **Builds a reference configuration** – generates a GC file and a CNVpytor-compatible configuration file for each assembly
-4. **Maps reads to the reference** – indexes the assembly, maps trimmed reads, converts SAM to BAM, and assesses mapping quality
+1. **Download reads and runs QC** – by default, downloads reads from SRA/ENA (via [iSeq](https://github.com/BioOmics/iSeq)) and assemblies from [AllTheBacteria](https://www.allthebacteria.org), trims reads with [fastp](https://github.com/opengene/fastp), runs [FastQC](https://github.com/s-andrews/fastqc) and collates these into a [MultiQC](https://github.com/multiqc/multiqc) report. 
+3. **Builds a reference configuration** – generates a GC file and a [CNVpytor](https://github.com/abyzovlab/CNVpytor)-compatible configuration file for each assembly
+4. **Maps reads to the reference** – indexes the assembly, maps trimmed reads ([bwa-mem2](https://github.com/bwa-mem2/bwa-mem2), converts SAM to BAM, and assesses mapping quality ([samtools](https://github.com/samtools/samtools))
 5. **Calls copy number variants** – partitions the genome into bins (default 100 bp) and calls CNVs with [CNVpytor](https://github.com/abyzovlab/CNVpytor)
 
 
@@ -28,7 +34,7 @@ cd cnvfinder
 
 ### Input data
 
-The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns: read name (SRA accession ID) and assembly name (BioSample ID). Each line enters the pipeline and will be that read set mapped against that assembly. You can specify the same read set mapped to multiple assemblies and vice versa:
+The pipeline takes **matched read and assembly pairs** via a CSV file (passed with `--accessions`), rather than a standard samplesheet. It has two columns with **NO** header: read name (SRA accession ID) and assembly name (BioSample ID). Each line enters the pipeline and will be that read set mapped against that assembly. You can specify the same read set mapped to multiple assemblies and vice versa:
 
 ```csv
 ERR304775,SAMEA1920853
@@ -99,13 +105,13 @@ Results are organised into the following subfolders of `--outdir`:
 | `configs/`                   | CNVpytor genome configuration file (`.py`) for each strain          |
 | `GC_files/`                  | CNVpytor `.pytor` files used in reference configuration             |
 | `metadata/`                  | Per-strain metadata `.tsv` files from SRA/ENA download               |
-| `Pytors/`                    | CNVpytor `.py` reference files                                       |
+| `pytors/`                    | CNVpytor `.py` reference files                                       |
 | `QC/`                        | FastQC logs/outputs, plus `samtools depth`/coverage files            |
-| `Reads/`                     | Raw reads downloaded from SRA/ENA                                    |
-| `Results/multiQC/`           | MultiQC summary report (`.html`)                                     |
-| `Results/pipeline_info/`     | Pipeline execution report and software versions                      |
+| `reads/`                     | Raw reads downloaded from SRA/ENA                                    |
+| `results/multiQC/`           | MultiQC summary report (`.html`)                                     |
+| `results/pipeline_info/`     | Pipeline execution report and software versions                      |
 | `SAMs/`                      | SAM files from read mapping                                           |
-| `Trimmed_reads/`             | Trimmed FASTQ read files                                              |
+| `trimmed_reads/`             | Trimmed FASTQ read files                                              |
 
 `calls/` is where you will find a tsv file for each sample with CNVpytor calls. If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, multi-copy genes not in tandem. 
 
