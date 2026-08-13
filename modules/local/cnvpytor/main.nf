@@ -11,7 +11,7 @@ process CNVPREDICT {
     tuple val(meta), val(assembly_id), path(pytor), path(config)
 
     output:
-    tuple val(meta), val(assembly_id), path("*.tsv"), path("*.png"), emit: calls
+    tuple val(meta), val(assembly_id), path("*.tsv"), emit: calls
     path "versions.yml", emit: versions
 
     script:

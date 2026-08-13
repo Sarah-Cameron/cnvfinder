@@ -18,7 +18,7 @@ process CONFIG {
         ${params.assemblies}/${assembly_id}.${params.fasta} \
         ${assembly_id} \
         "${params.species}" \
-        "${gc_file}" \
+        "${params.gc_dir}/${gc_file}" \
         > ${assembly_id}.py
 
     cat <<-END_VERSIONS > versions.yml

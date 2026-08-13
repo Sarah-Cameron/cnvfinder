@@ -89,6 +89,7 @@ nextflow run main.nf --accessions test.csv -profile docker,emulate_amd64 --speci
 | ----------------- | ---------------------------------------------------------------------------- | ----------------------- |
 | `--accessions`    | CSV file mapping read names to assembly names (see format above)             | *required*              |
 | `--profile`       | Execution profile: `docker`, `apptainer`, or `slurm`                        | *required*              |
+| `--outdir`	    | Output directory for results						  | `results/`	            |
 | `--fasta`         | File extension of assemblies (e.g. `.fasta`, `.fa`, `.fna`)                  | `fa`                        |
 | `--skip_download` | Skip automatic download of reads/assemblies (use for private/local data)     | `false`                 |
 | `--bin_size`      | Read-depth bin size for CNV calling. Must be a multiple of 100.              | `100`                   |
@@ -97,21 +98,22 @@ nextflow run main.nf --accessions test.csv -profile docker,emulate_amd64 --speci
 
 ## Pipeline output
 
-Results are organised into the following subfolders of `--outdir`:
+Outputs are organised into the following folders:
 
 | Folder                       | Contents                                                            |
 | ------------------------------ | ---------------------------------------------------------------------- |
-| `calls/`                     | `.tsv` files of predicted CNVs, output by CNVpytor                  |
-| `configs/`                   | CNVpytor genome configuration file (`.py`) for each strain          |
+| `assemblies/`                | Genome assemblies downloaded from AllTheBacteria                    |
 | `GC_files/`                  | CNVpytor `.pytor` files used in reference configuration             |
-| `metadata/`                  | Per-strain metadata `.tsv` files from SRA/ENA download               |
-| `pytors/`                    | CNVpytor `.py` reference files                                       |
-| `QC/`                        | FastQC logs/outputs, plus `samtools depth`/coverage files            |
 | `reads/`                     | Raw reads downloaded from SRA/ENA                                    |
+| `results/calls/`                     | `.tsv` files of predicted CNVs, output by CNVpytor                  |
+| `results/configs/`                   | CNVpytor genome configuration file (`.py`) for each strain          |
+| `results/metadata/`                  | Per-strain metadata `.tsv` files from SRA/ENA download               |
+| `results/pytors/`                    | CNVpytor `.py` reference files                                       |
+| `results/QC/`                        | FastQC logs/outputs, plus `samtools depth`/coverage files            |
 | `results/multiQC/`           | MultiQC summary report (`.html`)                                     |
 | `results/pipeline_info/`     | Pipeline execution report and software versions                      |
-| `SAMs/`                      | SAM files from read mapping                                           |
-| `trimmed_reads/`             | Trimmed FASTQ read files                                              |
+| `results/SAMs/`                      | SAM files from read mapping                                           |
+| `results/trimmed_reads/`             | Trimmed FASTQ read files                                              |
 
 `calls/` is where you will find a tsv file for each sample with CNVpytor calls as detailed [here](https://github.com/abyzovlab/CNVpytor/blob/master/GettingStarted.md). If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, multi-copy genes not in tandem.
  
