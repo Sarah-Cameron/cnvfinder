@@ -14,7 +14,7 @@ workflow CNVFINDER {
 
     // run download, QC and reference building in parallel
     DOWNLOAD_QC(accession_ch)
-    BUILD_REFERENCE(accession_ch)
+    BUILD_REFERENCE(DOWNLOAD_QC.out.assembly)
 
     // join trimmed reads with assembly_id ready for mapping
     map_input = DOWNLOAD_QC.out.trimmed

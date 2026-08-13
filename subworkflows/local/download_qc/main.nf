@@ -18,6 +18,7 @@ workflow DOWNLOAD_QC {
             .mix(READS.out.versions)
             .mix(ASSEMBLY.out.versions)
         reads_ch = READS.out.reads.map { meta, reads, metadata -> [ meta, reads ] }
+	assembly_ch = ASSEMBLY.out.assembly
     } else {
         reads_ch = accession_ch.map { meta, assembly_id ->
             [ meta, [
@@ -25,6 +26,9 @@ workflow DOWNLOAD_QC {
                 file("${params.reads_dir}/${meta.id}_2.fastq.gz")
             ]]
         }
+	assembly_ch = accession_ch.map { meta, assembly_id -> 
+		[ meta, assembly_id, file("${params.assemblies}/${assembly_id}.${params.fasta}") ]
+	}
         ch_versions = Channel.empty()
     }
 
@@ -35,6 +39,7 @@ workflow DOWNLOAD_QC {
 
     emit:
     trimmed = FASTP.out.reads
+    assembly = assembly_ch
     versions = ch_versions
      .mix(FASTP.out.versions)
      .mix(FASTQC.out.versions)

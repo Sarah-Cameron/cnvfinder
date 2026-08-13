@@ -6,16 +6,16 @@ process GCFILE {
     container 'quay.io/biocontainers/cnvpytor:1.3.1--pyhdfd78af_0'
 
     input:
-    tuple val(meta), val(assembly_id)
+    tuple val(meta), val(assembly_id), path(assembly_fasta)
 
     output:
-    tuple val(meta), val(assembly_id), path("*.pytor"), emit: gcfile
+    tuple val(meta), val(assembly_id), path(assembly_fasta), path("*.pytor"), emit: gcfile
     path "versions.yml", emit: versions
 
     script:
     """
     cnvpytor -root ${meta.id}_${assembly_id}_gc_file.pytor \
-        -gc ${params.assemblies}/${assembly_id}.${params.fasta} \
+        -gc ${assembly_fasta} \
         -make_gc_file
 
     cat <<-END_VERSIONS > versions.yml

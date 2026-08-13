@@ -6,10 +6,10 @@ include { CONFIG  } from '../../../modules/local/config/main'
 workflow BUILD_REFERENCE {
 
     take:
-    accession_ch    // channel: [ val(meta), val(assembly_id) ]
+    assembly_ch    // channel: [ val(meta), val(assembly_id), path(assembly_fasta) ]
 
     main:
-    GCFILE(accession_ch)
+    GCFILE(assembly_ch)
     CONFIG(GCFILE.out.gcfile)
 
     emit:

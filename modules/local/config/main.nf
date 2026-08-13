@@ -6,7 +6,7 @@ process CONFIG {
     container 'quay.io/biocontainers/cnvpytor:1.3.1--pyhdfd78af_0'
 
     input:
-    tuple val(meta), val(assembly_id), path(gc_file)
+    tuple val(meta), val(assembly_id), path(assembly_fasta), path(gc_file)
 
     output:
     tuple val(meta), val(assembly_id), path("*.py"), emit: config
@@ -15,7 +15,7 @@ process CONFIG {
     script:
     """
     python $projectDir/bin/config_file.py \
-        ${params.assemblies}/${assembly_id}.${params.fasta} \
+        ${assembly_fasta} \
         ${assembly_id} \
         "${params.species}" \
         "${params.gc_dir}/${gc_file}" \
