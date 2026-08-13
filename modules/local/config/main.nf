@@ -2,7 +2,7 @@
 
 process CONFIG {
     tag "Making config file for ${meta.id}"
-    publishDir params.configs_dir, mode: 'copy', pattern: '*.py'
+    publishDir params.configs_dir, mode: params.publish_dir_mode, pattern: '*.py'
     container 'quay.io/biocontainers/cnvpytor:1.3.1--pyhdfd78af_0'
 
     input:
@@ -18,7 +18,7 @@ process CONFIG {
         ${params.assemblies}/${assembly_id}.${params.fasta} \
         ${assembly_id} \
         "${params.species}" \
-        "${params.gc_dir}/${gc_file}" \
+        "${gc_file}" \
         > ${assembly_id}.py
 
     cat <<-END_VERSIONS > versions.yml

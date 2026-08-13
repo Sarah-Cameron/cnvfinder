@@ -1,7 +1,7 @@
 
 process FASTP {
     tag "Trimming ${meta.id}"
-    publishDir params.trimmed_dir, mode: 'copy', pattern: '*_trim.fastq.gz'
+    publishDir params.trimmed_dir, mode: params.publish_dir_mode, pattern: '*_trim.fastq.gz'
     container 'quay.io/biocontainers/fastp:0.24.0--h125f33a_0'
 
     input:

@@ -57,7 +57,7 @@ By default, the pipeline downloads and assemblies reads for you. Use SRA Run acc
 
 #### Path B: Using your own reads
 
-If you have your own read files (private data, or pre-downloaded for HPC), place them in a folder called `reads/`, named `<read_name>.fastq.gz`. Place assemblies in `/assemblies`, named `<assembly_name>.fa`. (If ending is a `.fasta` use `--fasta fasta` when running the pipeline. Use those same names as the `read_name` and `assembly_name` columns in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
+If you have your own read files (private data, or pre-downloaded for HPC), place them **compressed** in a folder called `reads/`, named `<read_name>.fastq.gz`. Place assemblies **uncompressed** in `/assemblies`, named `<assembly_name>.fa`. If ending is a `.fasta` use `--fasta fasta` when running the pipeline. Use those same names as the `read_name` and `assembly_name` columns in `accessions.csv`, and run the pipeline with `--skip_download true` so it uses your local files instead of trying to download reads itself.
 
 ```csv
 my_own_reads,my_own_assembly
@@ -113,7 +113,8 @@ Results are organised into the following subfolders of `--outdir`:
 | `SAMs/`                      | SAM files from read mapping                                           |
 | `trimmed_reads/`             | Trimmed FASTQ read files                                              |
 
-`calls/` is where you will find a tsv file for each sample with CNVpytor calls. If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, multi-copy genes not in tandem. 
+`calls/` is where you will find a tsv file for each sample with CNVpytor calls as detailed [here](https://github.com/abyzovlab/CNVpytor/blob/master/GettingStarted.md). If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, multi-copy genes not in tandem.
+ 
 
 ## Credits
 

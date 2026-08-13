@@ -1,7 +1,7 @@
 
 process GCFILE {
     tag "Making the GC File for ${meta.id}"
-    publishDir params.gc_dir, mode: 'copy', pattern: '*.pytor'
+    publishDir params.gc_dir, mode: params.publish_dir_mode, pattern: '*.pytor'
     maxForks 10
     container 'quay.io/biocontainers/cnvpytor:1.3.1--pyhdfd78af_0'
 

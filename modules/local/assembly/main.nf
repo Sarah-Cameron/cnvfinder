@@ -1,6 +1,6 @@
 process ASSEMBLY {
     tag "Downloading assembly ${assembly_id}"
-    publishDir params.assemblies, mode: 'copy', pattern: '*.fa'
+    publishDir params.assemblies, mode: params.publish_dir_mode, pattern: '*.fa'
     maxForks 2
 
     input:

@@ -1,8 +1,8 @@
              
 process READS {
 	tag "Downloading ${meta.id}"
-	publishDir params.reads_dir, mode:'copy', pattern: '*.fastq.gz' 
-	publishDir params.metadata_dir, mode: 'copy', pattern: '*.metadata.tsv'
+	publishDir params.reads_dir, mode: params.publish_dir_mode, pattern: '*.fastq.gz' 
+	publishDir params.metadata_dir, mode: params.publish_dir_mode, pattern: '*.metadata.tsv'
 	maxForks 2
 	afterScript 'sleep 10'
 

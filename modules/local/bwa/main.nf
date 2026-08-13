@@ -1,7 +1,7 @@
 
 process BWA {
     tag "Indexing and mapping ${meta.id}"
-    publishDir params.sam_dir, mode: 'copy', pattern: '*.sam'
+    publishDir params.sam_dir, mode: params.publish_dir_mode, pattern: '*.sam'
     maxForks 1
     label 'process_high'
     container 'quay.io/biocontainers/bwa-mem2:2.2.1--hd03093a_4'

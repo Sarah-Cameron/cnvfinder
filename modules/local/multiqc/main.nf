@@ -1,7 +1,7 @@
 
 process MULTIQC {
         tag "Multiqc"
-        publishDir params.qc_dir, mode:'copy'
+        publishDir params.qc_dir, mode: params.publish_dir_mode
         
         container 'biocontainers/multiqc:1.23--pyhdfd78af_0'
         input:

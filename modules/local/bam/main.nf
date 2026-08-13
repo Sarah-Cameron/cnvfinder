@@ -2,9 +2,9 @@
 
 process BAM {
     tag "Converting ${meta.id} SAM to BAM and making read depth file"
-    publishDir params.pytor_dir, mode: 'copy', pattern: '*.pytor'
-    publishDir params.qc_dir, mode: 'copy', pattern: '*.depth'
-    publishDir params.qc_dir, mode: 'copy', pattern: '*.txt'
+    publishDir params.pytor_dir, mode: params.publish_dir_mode, pattern: '*.pytor'
+    publishDir params.qc_dir, mode: params.publish_dir_mode, pattern: '*.depth'
+    publishDir params.qc_dir, mode: params.publish_dir_mode, pattern: '*.txt'
     label 'process_high_memory'
     container 'docker.io/sc3445/samtools-cnvpytor:6.0'
 

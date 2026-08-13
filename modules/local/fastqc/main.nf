@@ -2,7 +2,7 @@
 
 process FASTQC {
         tag "Fastqc on ${meta.id}"
-        publishDir params.qc_dir, mode:'copy'
+        publishDir params.qc_dir, mode: params.publish_dir_mode
         
         container 'biocontainers/fastqc:0.12.1--hdfd78af_0'
         input:
