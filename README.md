@@ -119,17 +119,17 @@ Outputs are organised into the following folders:
 
 "Columns are as follows: 
 
-CNV type: "deletion" or "duplication", \
-CNV region: (chr:start-end), \
-CNV size: (bp), \
-CNV level: read depth normalised to 1, \
-e-val1: e-value (p-value multiplied by genome size divided by the bin size) calculated using t-test statistics between RD statistics in the region and global, \
-e-val2: e-value (p-value multiplied by genome size divided by the bin size) from the probability of RD values within the region to be the tails of a gaussian distribution of binned RD, \
-e-val3: same as e-val1 but for the middle of the CNV, \
-e-val4: same as e-val2 but for the middle of the CNV, \
-q0: fraction of reads mapped with q0 quality in call region, \
-pN: fraction of reference genome gaps (Ns) in call region, \
-dG: distance from closest large (>100bp) gap in reference genome" 
+**CNV type:** "deletion" or "duplication", \
+**CNV region:** (chr:start-end), \
+**CNV size:** (bp), \
+**CNV level:** read depth normalised to 1, \
+**e-val1:** e-value (p-value multiplied by genome size divided by the bin size) calculated using t-test statistics between RD statistics in the region and global, \
+**e-val2:** e-value (p-value multiplied by genome size divided by the bin size) from the probability of RD values within the region to be the tails of a gaussian distribution of binned RD, \
+**e-val3:** same as e-val1 but for the middle of the CNV, \
+**e-val4:** same as e-val2 but for the middle of the CNV, \
+**q0:** fraction of reads mapped with q0 quality in call region, \
+**pN:** fraction of reference genome gaps (Ns) in call region, \
+**dG:** distance from closest large (>100bp) gap in reference genome" 
 
 <p align="center">
   <img src="cnvpytor_calls.png" width="900" alt="Example of CNVpytor output">
