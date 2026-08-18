@@ -8,7 +8,7 @@
 
 ## Introduction
 
-**cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. This has been written in Nextflow using the nf-core template. Given paired reads and a matching genome assembly for each sample, the pipeline:
+**cnvfinder** is a bioinformatics pipeline for detecting copy number variants (CNVs) in bacterial genomes from short-read sequencing data. This has been written in Nextflow using the nf-core template. From a csv of SRA accession IDs and matching  BioSample IDs, the pipeline:
 
 1. **Download reads and runs QC** – by default, downloads reads from SRA/ENA (via [iSeq](https://github.com/BioOmics/iSeq)) and assemblies from [AllTheBacteria](https://www.allthebacteria.org), trims reads with [fastp](https://github.com/opengene/fastp), runs [FastQC](https://github.com/s-andrews/fastqc) and collates these into a [MultiQC](https://github.com/multiqc/multiqc) report. 
 3. **Builds a reference configuration** – generates a GC file and a [CNVpytor](https://github.com/abyzovlab/CNVpytor)-compatible configuration file for each assembly
@@ -41,7 +41,7 @@ ERR304775,SAMEA1920853
 ERR304775,SAMN0000001
 ```
 
-We choose to map to the corresponding short-read based reference from [AllTheBacteria](https://www.allthebacteria.org) although this can be messy, and detect changes in read depth other than CNVs, because the short-read reference will usually miss most genome amplifications, using this method allow us to spot these. 
+We choose to align read sets to the corresponding short-read based assembly of the reads from [AllTheBacteria](https://www.allthebacteria.org). Short-read only based assemblies will not incorporate most genome amplifications so when the reads are aligned there will be a change in read depth and allow the use of this method. Long read based references can capture duplications in the assembly and this won't give a change in read depth when reads are mapped. 
 
 How you fill in the csv columns depends on which of the two paths below you're using.
 
@@ -115,8 +115,25 @@ Outputs are organised into the following folders:
 | `results/SAMs/`                      | SAM files from read mapping                                           |
 | `results/trimmed_reads/`             | Trimmed FASTQ read files                                              |
 
-`calls/` is where you will find a tsv file for each sample with CNVpytor calls as detailed [here](https://github.com/abyzovlab/CNVpytor/blob/master/GettingStarted.md). If using a short read based reference this will include a lot of calls detecting changes in read depth from reasons other than just CNVs. e.g. IS elements, rRNA genes, prophage activation, multi-copy genes not in tandem.
- 
+`calls/` is where you will find a tsv file for each sample with CNVpytor calls as detailed [here](https://github.com/abyzovlab/CNVpytor/blob/master/GettingStarted.md).
+
+"Columns are as follows: 
+
+CNV type: "deletion" or "duplication",
+CNV region: (chr:start-end),
+CNV size: (bp),
+CNV level: read depth normalised to 1,
+e-val1: e-value (p-value multiplied by genome size divided by the bin size) calculated using t-test statistics between RD statistics in the region and global,
+e-val2: e-value (p-value multiplied by genome size divided by the bin size) from the probability of RD values within the region to be the tails of a gaussian distribution of binned RD,
+e-val3: same as e-val1 but for the middle of the CNV,
+e-val4: same as e-val2 but for the middle of the CNV,
+q0: fraction of reads mapped with q0 quality in call region,
+pN: fraction of reference genome gaps (Ns) in call region,
+dG: distance from closest large (>100bp) gap in reference genome"
+
+<p align="center">
+  <img src="cnvpytor_calls.png" width="500" alt="Example of CNVpytor output">
+</p>
 
 ## Credits
 
