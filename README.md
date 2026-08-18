@@ -129,10 +129,10 @@ e-val3: same as e-val1 but for the middle of the CNV, \
 e-val4: same as e-val2 but for the middle of the CNV, \
 q0: fraction of reads mapped with q0 quality in call region, \
 pN: fraction of reference genome gaps (Ns) in call region, \
-dG: distance from closest large (>100bp) gap in reference genome" \
+dG: distance from closest large (>100bp) gap in reference genome" 
 
 <p align="center">
-  <img src="cnvpytor_calls.png" width="700" alt="Example of CNVpytor output">
+  <img src="cnvpytor_calls.png" width="900" alt="Example of CNVpytor output">
 </p>
 
 ## Credits
